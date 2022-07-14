@@ -1,4 +1,4 @@
-package feature2;
+package feature_login;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -32,7 +32,9 @@ public class LoginTest {
 
     @After
     public void tearDown() {
-        userClient.deletingUser(accessToken, user);
+        if (accessToken != null && user != null)
+            userClient.deletingUser(accessToken, user);
+
     }
 
     @Test

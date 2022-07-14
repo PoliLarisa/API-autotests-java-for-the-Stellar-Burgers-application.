@@ -1,4 +1,4 @@
-package feature1;
+package feature_user;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import users.User;
 import users.UserClient;
+
 import static org.junit.Assert.*;
 
 @Epic("Creating new user role")
@@ -28,10 +29,10 @@ public class CreatingUserTest {
 
     @After
     public void tearDown() {
-        if (accessToken != null) {
+        if (accessToken != null && user != null)
             userClient.deletingUser(accessToken, user);
-        }
-    }
+       }
+
 
     @Test
     @DisplayName("Creating user")

@@ -74,7 +74,6 @@ public class UserClient extends RestClient {
     public ValidatableResponse deletingUser(String accessToken, User user) {
         return given()
                 .spec(getBaseSpec())
-                .body(user)
                 .auth().oauth2(accessToken)
                 .when()
                 .delete(USER_PATH + "user")

@@ -1,4 +1,4 @@
-package feature3;
+package feature_change;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -33,7 +33,9 @@ public class ChangeUserDataTest {
 
     @After
     public void tearDown() {
-        userClient.deletingUser(accessToken, user);
+        if (accessToken != null && user != null)
+            userClient.deletingUser(accessToken, user);
+
     }
 
     @Test
@@ -41,14 +43,10 @@ public class ChangeUserDataTest {
     @Description("Getting information about user")
     public void getUserDataTest() {
         userClient.gettingInformationUser(accessToken);
-
         int statusCode = response.extract().statusCode();
-        boolean isGeted= response.extract().path("success");
         String userEmail = response.extract().path("user.email");
         String userName = response.extract().path("user.name");
-
         assertEquals("Incorrect status code",200, statusCode);
-        assertTrue("Information doesn't get",isGeted);
         assertEquals("User email doesn't match", user.getEmail(), userEmail);
         assertEquals("User name doesn't match", user.getName(), userName);
     }
@@ -62,7 +60,6 @@ public class ChangeUserDataTest {
         int statusCode = response.extract().statusCode();
         boolean isNotChanged = response.extract().path("success");
         String message = response.extract().path("message");
-
         assertEquals("Incorrect status code",401, statusCode);
         assertFalse("Information was changed", isNotChanged);
         assertEquals("Error message doesn't match","You should be authorised", message);

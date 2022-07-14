@@ -1,4 +1,4 @@
-package feature5;
+package feature_info;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -40,7 +40,8 @@ public class GetOrderTest {
 
     @After
     public void tearDown() {
-        userClient.deletingUser(accessToken, user);
+        if (accessToken != null && user != null)
+            userClient.deletingUser(accessToken, user);
     }
 
     @Test

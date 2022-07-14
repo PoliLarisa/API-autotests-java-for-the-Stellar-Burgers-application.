@@ -1,4 +1,4 @@
-package feature4;
+package feature_orders;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -39,7 +39,8 @@ public class CreatingOrdersTest {
 
     @After
     public void tearDown() {
-        userClient.deletingUser(accessToken, user);
+
+            userClient.deletingUser(accessToken, user);
     }
 
     @Test
