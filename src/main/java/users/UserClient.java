@@ -71,12 +71,14 @@ public class UserClient extends RestClient {
     }
 
     @Step("Deleting user")
-    public ValidatableResponse deletingUser(String accessToken, User user) {
-        return given()
+    public void deletingUser(String accessToken, User user) {
+        if (user == null) return;
+        given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
+                .auth().oauth2(accessToken.substring(7))
                 .when()
                 .delete(USER_PATH + "user")
                 .then().log().all();
     }
+
 }

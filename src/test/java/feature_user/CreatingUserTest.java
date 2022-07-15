@@ -48,29 +48,7 @@ public class CreatingUserTest {
         assertEquals("Incorrect status code", 200, statusCode);
     }
 
-    @Test
-    @DisplayName("Creating user")
-    @Description("Basic test user is deleted")
-    public void deletingUserTest() {
-        user = User.getRandom();
-        ValidatableResponse response = userClient.userCreate(user);
-
-        accessToken = response.extract().path("accessToken").toString().substring(7);
-        ValidatableResponse deleteResponse = userClient.deletingUser(accessToken, user);
-
-        int statusCode = deleteResponse.extract().statusCode();
-        boolean isDeleted = deleteResponse.extract().path("success");
-        String message = deleteResponse.extract().path("message");
-        String userEmail = response.extract().path("user.email");
-        String userName = response.extract().path("user.name");
-
-        assertEquals("Incorrect status code",202, statusCode);
-        assertTrue("User not be deleted",isDeleted);
-        assertEquals("Error message doesn't match","User successfully removed", message);
-        assertEquals("User email doesn't match",user.getEmail().toLowerCase(), userEmail);
-        assertEquals("User name doesn't match",user.getName(), userName);
-    }
-
+  
     @Test
     @DisplayName("Creating second user")
     @Description("Test for can't be created second user")
