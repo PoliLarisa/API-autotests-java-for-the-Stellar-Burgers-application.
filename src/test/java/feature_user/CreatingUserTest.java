@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class CreatingUserTest {
 
     private UserClient userClient;
-    private String accessToken;
+    private String auth;
     private User user;
 
     @Before
@@ -29,8 +29,8 @@ public class CreatingUserTest {
 
     @After
     public void tearDown() {
-        if (accessToken != null && user != null)
-            userClient.deletingUser(accessToken, user);
+        if (auth != null)
+            userClient.deletingUser(auth);
        }
 
 
@@ -40,7 +40,7 @@ public class CreatingUserTest {
     public void creatingUserTest() {
         user = User.getRandom();
         ValidatableResponse response = userClient.userCreate(user);
-        accessToken = response.extract().path("accessToken").toString().substring(7);
+        auth = response.extract().path("accessToken").toString().substring(7);
 
         boolean isCreated = response.extract().path("success");
         int statusCode = response.extract().statusCode();
@@ -61,6 +61,10 @@ public class CreatingUserTest {
         boolean isNotCreated = secondUser.extract().path("success");
         String message = secondUser.extract().path("message");
         int statusCode = secondUser.extract().statusCode();
+        if (secondUser.extract().body().path("accessToken") != null) {
+            String auth = secondUser.extract().body().path("accessToken");
+            userClient.deletingUser(auth);
+        }
         assertFalse("Second user was created",isNotCreated);
         assertEquals("Error message doesn't match","User already exists", message);
         assertEquals("Incorrect status code",403, statusCode);
@@ -80,6 +84,10 @@ public class CreatingUserTest {
         boolean isNotCreated = response.extract().path("success");
         String message = response.extract().path("message");
         int statusCode = response.extract().statusCode();
+        if (response.extract().body().path("accessToken") != null) {
+            String auth = response.extract().body().path("accessToken");
+            userClient.deletingUser(auth);
+        }
         assertFalse("User be created", isNotCreated);
         assertEquals("Error message doesn't match","Email, password and name are required fields", message);
         assertEquals("Incorrect status code",403, statusCode);
@@ -99,6 +107,10 @@ public class CreatingUserTest {
         boolean isNotCreated = response.extract().path("success");
         String message = response.extract().path("message");
         int statusCode = response.extract().statusCode();
+        if (response.extract().body().path("accessToken") != null) {
+            String auth = response.extract().body().path("accessToken");
+            userClient.deletingUser(auth);
+        }
         assertFalse("User be created", isNotCreated);
         assertEquals("Error message doesn't match","Email, password and name are required fields", message);
         assertEquals("Incorrect status code",403, statusCode);
@@ -118,6 +130,10 @@ public class CreatingUserTest {
         boolean isNotCreated = response.extract().path("success");
         String message = response.extract().path("message");
         int statusCode = response.extract().statusCode();
+        if (response.extract().body().path("accessToken") != null) {
+            String auth = response.extract().body().path("accessToken");
+            userClient.deletingUser(auth);
+        }
         assertFalse("User be created",isNotCreated);
         assertEquals("Error message doesn't match","Email, password and name are required fields", message);
         assertEquals("Incorrect status code",403, statusCode);

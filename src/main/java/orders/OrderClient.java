@@ -10,9 +10,9 @@ public class OrderClient extends RestClient {
     private static final String ORDER_PATH = "/api/orders";
 
     @Step("Creating order with authorization")
-    public ValidatableResponse orderCreateWithAuthorization(String accessToken, Order order) {
+    public ValidatableResponse orderCreateWithAuthorization(String auth, Order order) {
         return given()
-                .auth().oauth2(accessToken)
+                .auth().oauth2(auth)
                 .spec(getBaseSpec())
                 .body(order)
                 .when()
@@ -31,9 +31,9 @@ public class OrderClient extends RestClient {
     }
 
     @Step("Getting orders only 1 user with authorization")
-    public ValidatableResponse gettingOrderUserWithAuthorization(String accessToken) {
+    public ValidatableResponse gettingOrderUserWithAuthorization(String auth) {
         return given()
-                .auth().oauth2(accessToken)
+                .auth().oauth2(auth)
                 .spec(getBaseSpec())
                 .when()
                 .get(ORDER_PATH)

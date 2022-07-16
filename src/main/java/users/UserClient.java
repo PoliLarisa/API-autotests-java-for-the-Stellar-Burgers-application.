@@ -40,9 +40,9 @@ public class UserClient extends RestClient {
     }
 
     @Step("Getting information about user")
-    public ValidatableResponse gettingInformationUser(String accessToken) {
+    public ValidatableResponse gettingInformationUser(String auth) {
         return given()
-                .header("Authorization", accessToken)
+                .header("Authorization", auth)
                 .spec(getBaseSpec())
                 .when()
                 .get(USER_PATH + "user")
@@ -50,10 +50,10 @@ public class UserClient extends RestClient {
     }
 
     @Step("Refreshing information user with token")
-    public ValidatableResponse changeInformationUserWithToken(String accessToken, User user) {
+    public ValidatableResponse changeInformationUserWithToken(String auth, User user) {
         return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken)
+                .auth().oauth2(auth)
                 .body(user)
                 .when()
                 .patch(USER_PATH + "user")
@@ -71,14 +71,12 @@ public class UserClient extends RestClient {
     }
 
     @Step("Deleting user")
-    public void deletingUser(String accessToken, User user) {
-        if (user == null) return;
-        given()
+    public ValidatableResponse deletingUser(String auth) {
+        return given()
                 .spec(getBaseSpec())
-                .auth().oauth2(accessToken.substring(7))
+                .header("Authorization", auth)
                 .when()
                 .delete(USER_PATH + "user")
-                .then().log().all();
+                .then();
     }
-
 }

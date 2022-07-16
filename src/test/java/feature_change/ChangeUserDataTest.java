@@ -20,7 +20,7 @@ public class ChangeUserDataTest {
     private User user;
     private UserClient userClient;
     private ValidatableResponse response;
-    private String accessToken;
+    private String auth;
 
     @Before
     public void setUp() {
@@ -28,13 +28,13 @@ public class ChangeUserDataTest {
         user = User.getRandom();
         response = userClient.userCreate(user);
         userClient.validation(UserCredentials.from(user));
-        accessToken = response.extract().path("accessToken").toString().substring(7);
+        auth = response.extract().path("accessToken").toString().substring(7);
     }
 
     @After
     public void tearDown() {
-        if (accessToken != null && user != null)
-            userClient.deletingUser(accessToken, user);
+        if (auth != null)
+            userClient.deletingUser(auth);
 
     }
 
@@ -42,7 +42,7 @@ public class ChangeUserDataTest {
     @DisplayName("Changing user")
     @Description("Getting information about user")
     public void getUserDataTest() {
-        userClient.gettingInformationUser(accessToken);
+        userClient.gettingInformationUser(auth);
         int statusCode = response.extract().statusCode();
         String userEmail = response.extract().path("user.email");
         String userName = response.extract().path("user.name");
@@ -77,7 +77,7 @@ public class ChangeUserDataTest {
                 .name(user.getName())
                 .build();
 
-        userClient.changeInformationUserWithToken(accessToken, newUser);
+        userClient.changeInformationUserWithToken(auth, newUser);
 
         int statusCode = response.extract().statusCode();
         boolean isChanged= response.extract().path("success");
@@ -100,7 +100,7 @@ public class ChangeUserDataTest {
                 .name(user.getName())
                 .build();
 
-        userClient.changeInformationUserWithToken(accessToken, newUser);
+        userClient.changeInformationUserWithToken(auth, newUser);
 
         int statusCode = response.extract().statusCode();
         boolean isChanged= response.extract().path("success");
@@ -122,7 +122,7 @@ public class ChangeUserDataTest {
                 .name(newName)
                 .build();
 
-        userClient.changeInformationUserWithToken(accessToken, newUser);
+        userClient.changeInformationUserWithToken(auth, newUser);
 
         int statusCode = response.extract().statusCode();
         boolean isChanged= response.extract().path("success");
@@ -144,7 +144,7 @@ public class ChangeUserDataTest {
                 .name(user.getName())
                 .build();
 
-        userClient.changeInformationUserWithToken(accessToken, newUser);
+        userClient.changeInformationUserWithToken(auth, newUser);
 
         int statusCode = response.extract().statusCode();
         boolean isNotChanged = response.extract().path("success");

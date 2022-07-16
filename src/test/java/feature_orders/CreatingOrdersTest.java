@@ -23,7 +23,7 @@ public class CreatingOrdersTest {
     private UserClient userClient;
     private User user;
     private ValidatableResponse response;
-    private String accessToken;
+    private String auth;
     private String firstIngredient;
 
     @Before
@@ -32,7 +32,7 @@ public class CreatingOrdersTest {
         userClient = new UserClient();
         user = User.getRandom();
         response = userClient.userCreate(user);
-        accessToken = response.extract().path("accessToken").toString().substring(7);
+        auth = response.extract().path("accessToken").toString().substring(7);
         ValidatableResponse ingredients = orderClient.gettingAllIngredients();
         firstIngredient = ingredients.extract().path("data[0]._id");
     }
@@ -40,7 +40,8 @@ public class CreatingOrdersTest {
     @After
     public void tearDown() {
 
-            userClient.deletingUser(accessToken, user);
+        if (auth != null)
+            userClient.deletingUser(auth);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class CreatingOrdersTest {
         Order order = new Order();
         order.setIngredients(Collections.singletonList(firstIngredient));
 
-        response = orderClient.orderCreateWithAuthorization(accessToken, order);
+        response = orderClient.orderCreateWithAuthorization(auth, order);
 
         int statusCode = response.extract().statusCode();
         String name = response.extract().path("name");
@@ -83,7 +84,7 @@ public class CreatingOrdersTest {
     public void creatingOrderWithoutIngredientTest() {
         Order order = new Order();
 
-        response = orderClient.orderCreateWithAuthorization(accessToken, order);
+        response = orderClient.orderCreateWithAuthorization(auth, order);
 
         int statusCode = response.extract().statusCode();
         boolean isNotCreated = response.extract().path("success");
@@ -101,7 +102,7 @@ public class CreatingOrdersTest {
         Order order = new Order();
         order.setIngredients(Collections.singletonList(incorrectHashes));
 
-        response = orderClient.orderCreateWithAuthorization(accessToken, order);
+        response = orderClient.orderCreateWithAuthorization(auth, order);
 
         int statusCode = response.extract().statusCode();
         assertEquals("Incorrect status code", 500, statusCode);

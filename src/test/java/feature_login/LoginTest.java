@@ -20,20 +20,20 @@ public class LoginTest {
 
     private UserClient userClient;
     private User user;
-    private String accessToken;
+    private String auth;
 
     @Before
     public void setUp() {
         userClient = new UserClient();
         user = User.getRandom();
         ValidatableResponse response = userClient.userCreate(user);
-        accessToken = response.extract().path("accessToken").toString().substring(7);
+        auth = response.extract().path("accessToken").toString().substring(7);
     }
 
     @After
     public void tearDown() {
-        if (accessToken != null && user != null)
-            userClient.deletingUser(accessToken, user);
+        if (auth != null)
+            userClient.deletingUser(auth);
 
     }
 

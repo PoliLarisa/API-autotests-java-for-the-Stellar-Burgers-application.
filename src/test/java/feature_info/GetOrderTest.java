@@ -23,7 +23,7 @@ public class GetOrderTest {
     private OrderClient orderClient;
     private UserClient userClient;
     private User user;
-    private String accessToken;
+    private String auth;
     private ValidatableResponse response;
     private String firstIngredient;
 
@@ -33,15 +33,15 @@ public class GetOrderTest {
         userClient = new UserClient();
         user = User.getRandom();
         response = userClient.userCreate(user);
-        accessToken = response.extract().path("accessToken").toString().substring(7);
+        auth = response.extract().path("accessToken").toString().substring(7);
         ValidatableResponse ingredients = orderClient.gettingAllIngredients();
         firstIngredient = ingredients.extract().path("data[1]._id");
     }
 
     @After
     public void tearDown() {
-        if (accessToken != null && user != null)
-            userClient.deletingUser(accessToken, user);
+        if (auth != null)
+            userClient.deletingUser(auth);
     }
 
     @Test
@@ -50,9 +50,9 @@ public class GetOrderTest {
     public void getOrderOneUserWithAuthorizationTest() {
         Order order = new Order();
         order.setIngredients(Collections.singletonList(firstIngredient));
-        orderClient.orderCreateWithAuthorization(accessToken, order);
+        orderClient.orderCreateWithAuthorization(auth, order);
 
-        response = orderClient.gettingOrderUserWithAuthorization(accessToken);
+        response = orderClient.gettingOrderUserWithAuthorization(auth);
 
         int statusCode = response.extract().statusCode();
         boolean isGeted = response.extract().path("success");
@@ -68,7 +68,7 @@ public class GetOrderTest {
     public void getOrderOneUserWithoutAuthorization() {
         Order order = new Order();
         order.setIngredients(Collections.singletonList(firstIngredient));
-        orderClient.orderCreateWithAuthorization(accessToken, order);
+        orderClient.orderCreateWithAuthorization(auth, order);
 
         response = orderClient.gettingOrderUserWithoutAuthorization();
 
