@@ -1,2 +1,2 @@
 # Diplom_2
-API тесты (jzva). Ветка develop2.
+API тесты (java). Ветка develop2.
